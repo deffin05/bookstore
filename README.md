@@ -292,7 +292,7 @@ authorization and user profiles.
 **PATCH** `/account/cart/{id}`
 - Update info of the book in the cart(quantity)
 - Response status: `204`, `401`
-- Response body:
+- Request body:
 ```json
 {
     "quantity": 5
