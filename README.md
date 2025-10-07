@@ -10,8 +10,8 @@ authorization and user profiles.
 - Get list of books
 - Response status: `200`
 - Parameters:
-  - book_name: book name we are searching for
-  - author_name: author we are searching for
+  - book: book name we are searching for
+  - author: author we are searching for
   - sort: the way we are sorting the list
   - page
   - publisher: filter by a specific publisher
@@ -46,12 +46,27 @@ authorization and user profiles.
     "available": true
 }
 ```
+- Response body:
+```json
+{
+    "id": 1,
+    "title": "Harry Potter",
+    "description": "...",
+    "price": 300,
+    "author": "Joanne Rowling",
+    "publisher": "Ababagalamaga",
+    "pages": 345,
+    "year": 2005,
+    "available": true
+}
+```
 **GET** `/books/{id}`
 - Get a specific book
 - Response status: `200`
 - Response body:
 ```json
 {
+    "id": 1,
     "title": "Harry Potter",
     "description": "...",
     "price": 300,
@@ -65,11 +80,25 @@ authorization and user profiles.
 
 **PATCH** `/books/{id}`
 - Update info of a book
-- Response status: `204`
+- Response status: `200`
 - Request body:
 ```json
 {
     "price": 399,
+    "available": false
+}
+```
+- Response body:
+```json
+{
+    "id": 1,
+    "title": "Harry Potter",
+    "description": "...",
+    "price": 399,
+    "author": "Joanne Rowling",
+    "publisher": "Ababagalamaga",
+    "pages": 345,
+    "year": 2005,
     "available": false
 }
 ```
@@ -101,29 +130,37 @@ authorization and user profiles.
     "name": "Joanne Rowling"
 }
 ```
+- Response body:
+```json
+{
+    "id": 1,
+    "name": "Joanne Rowling"
+}
+```
 **GET** `/authors/{id}`
-- Get books of a specific author
+- Get a specific author
 - Response status: `200`
 - Response body:
 ```json
-[
-    {
-        "id": 1,
-        "title": "Harry Potter",
-        "price": 300,
-        "author": "Joanne Rowling",
-        "available": true
-    },
-    ...
-]
+{
+    "id": 1,
+    "name": "Joanne Rowling"
+}
 ```
 
 **PATCH** `/autohrs/{id}`
 - Update info of an author
-- Response status: `204`
+- Response status: `200`
 - Request body:
 ```json
 {
+    "name": "J. K. Rowling"
+}
+```
+- Response body:
+```json
+{
+    "id": 1,
     "name": "J. K. Rowling"
 }
 ```
@@ -155,29 +192,37 @@ authorization and user profiles.
     "name": "Ababagalamaga"
 }
 ```
+- Response body:
+```json
+{
+    "id": 1,
+    "name": "Ababagalamaga"
+}
+```
 **GET** `/publishers/{id}`
-- Get books of a specific publisher
+- Get a specific publisher
 - Response status: `200`
 - Response body:
 ```json
-[
-    {
-        "id": 1,
-        "title": "Harry Potter",
-        "price": 300,
-        "author": "Joanne Rowling",
-        "available": true
-    },
-    ...
-]
+{
+    "id": 1,
+    "name": "Ababagalamaga"
+}
 ```
 
 **PATCH** `/publishers/{id}`
 - Update info of a publisher
-- Response status: `204`
+- Response status: `200`
 - Request body:
 ```json
 {
+    "name": "Ablablababa"
+}
+```
+- Response body:
+```json
+{
+    "id": 1,
     "name": "Ablablababa"
 }
 ```
@@ -186,17 +231,17 @@ authorization and user profiles.
 - Deletes a publisher
 - Response status: `204`
 ---
-**GET** `/account`
+**GET** `/account/{account_id}`
 - Get account info
 - Response status: `200`, `401`
 - Response body:
 ```json
-[
+{
     "first_name": "Dmytro",
     "last_name": "Heh",
     "phone_number": "+3801414171",
     "email": "dmytro@gmail.com"
-]
+}
 ```
 
 **POST** `/account`
@@ -204,16 +249,26 @@ authorization and user profiles.
 - Response status: `201`
 - Request body:
 ```json
-[
+{
     "first_name": "Dmytro",
     "last_name": "Heh",
     "phone_number": "+380671417153",
     "email": "dmytro@gmail.com"
-]
+}
 ```
-**PATCH** `/account/{id}`
+- Response body:
+```json
+{
+    "id": 1,
+    "first_name": "Dmytro",
+    "last_name": "Heh",
+    "phone_number": "+380671417153",
+    "email": "dmytro@gmail.com"
+}
+```
+**PATCH** `/account/{account_id}`
 - Update account info
-- Response status: `204`, `401`
+- Response status: `200`, `401`
 - Request body:
 ```json
 {
@@ -221,12 +276,20 @@ authorization and user profiles.
     "phone_number": "+380975041668"
 }
 ```
+- Response body:
+```json
+{
+    "id": 1,
+    "first_name": "Anton",
+    "phone_number": "+380975041668"
+}
+```
 
-**DELETE** `/account/{id}`
+**DELETE** `/account/{account_id}`
 - Deletes an account
 - Response status: `204`, `401`
 ---
-**GET** `/account/orders`
+**GET** `/account/{account_id}/orders`
 - Get orders of the user
 - Response status: `200`, `401`
 - Response body:
@@ -234,15 +297,7 @@ authorization and user profiles.
 [
     {
         "id": 1,
-        "items": [
-            {
-                "id": 1,
-                "title": "Harry Potter",
-                "price": 300,
-                "author": "Joanne Rowling"
-            },
-            ...
-        ],
+        "items": [1, 2, 51, 12],
         "date": "12-05-2025",
         "price": 1000
     },
@@ -250,18 +305,27 @@ authorization and user profiles.
 ]
 ```
 
-**POST** `/account/orders`
+**POST** `/account/{account_id}/orders`
 - Create a new order
 - Response status: `201`, `401`
 - Request body: (list of book id's)
 
 ```json
 [
-    1,2,3,4...
+    1,2,3,4
 ]
 ```
+- Response body:
+```json
+{
+    "id": 1,
+    "items": [1, 2, 3, 4], 
+    "date": "12-05-2025",
+    "price": 1000
+}
+```
 ---
-**GET** `/account/cart`
+**GET** `/account/{account_id}/cart`
 - Get books in the cart
 - Response status: `200`, `401`
 - Response body:
@@ -279,17 +343,16 @@ authorization and user profiles.
 ]
 ```
 
-**POST** `/account/cart`
+**POST** `/account/{account_id}/cart`
 - Add a book to the cart
 - Response status: `201`, `401`
 - Request body:
-
 ```json
 {
     "id": 1
 }
 ```
-**PATCH** `/account/cart/{id}`
+**PATCH** `/account/{account_id}/cart/{book_id}`
 - Update info of the book in the cart(quantity)
 - Response status: `204`, `401`
 - Request body:
@@ -299,7 +362,7 @@ authorization and user profiles.
 }
 ```
 
-**DELETE** `/account/cart/{id}`
+**DELETE** `/account/{account_id}/cart/{book_id}`
 - Remove a book from the cart
 - Response status: `204`, `401`
 
