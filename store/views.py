@@ -106,7 +106,7 @@ class AuthorDetail(APIView):
 
     def get(self, request, pk):
         author = self.get_object(pk)
-        serializer = AuthorSerializer(author, many=True)
+        serializer = AuthorSerializer(author)
         return Response(serializer.data)
 
     def patch(self, request, pk):
