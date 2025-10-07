@@ -38,7 +38,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'store.apps.StoreConfig',
-    'rest_framework'
+    'rest_framework',
+    'corsheaders',
 ]
 
 MIDDLEWARE = [
@@ -49,6 +50,18 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
+]
+
+CORS_ORIGIN_WHITELIST = [
+    'http://localhost:63342',
+    'http://localhost:8100',
+    'https://localhost:63342',
+    'https://localhost:8100',
+    'http://127.0.0.1:63342',
+    'http://127.0.0.1:8100',
+    'https://127.0.0.1:63342',
+    'https://127.0.0.1:8100',
 ]
 
 ROOT_URLCONF = 'bookstore.urls'
