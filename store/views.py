@@ -13,6 +13,13 @@ from store.serializers import BookSerializer, PublisherSerializer, AuthorSeriali
 class BookList(APIView):
     def get(self, request):
         books = Book.objects.all()
+        if request.query_params.get('book'):
+            books = books.filter(title__icontains=request.query_params.get('book'))
+        if request.query_params.get('publisher'):
+            books = books.filter(publisher=request.query_params.get('publisher'))
+        if request.query_params.get('author'):
+            books = books.filter(author=request.query_params.get('author'))
+
         serializer = BookSerializer(books, many=True)
         return Response(serializer.data)
     def post(self, request):
