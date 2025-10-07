@@ -1,3 +1,4 @@
+from django.db.models import ProtectedError
 from django.http import Http404
 from rest_framework import status
 from rest_framework.response import Response
@@ -81,7 +82,10 @@ class PublisherDetail(APIView):
 
     def delete(self, request, pk):
         publisher = self.get_object(pk)
-        publisher.delete()
+        try:
+            publisher.delete()
+        except ProtectedError:
+            return Response("You cannot delete a publisher who has books", status=status.HTTP_403_FORBIDDEN)
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 class AuthorList(APIView):
@@ -119,5 +123,8 @@ class AuthorDetail(APIView):
 
     def delete(self, request, pk):
         author = self.get_object(pk)
-        author.delete()
+        try:
+            author.delete()
+        except ProtectedError:
+            return Response("You cannot delete an author who has active books", status=status.HTTP_403_FORBIDDEN)
         return Response(status=status.HTTP_204_NO_CONTENT)

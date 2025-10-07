@@ -5,6 +5,9 @@ from store.models import Book, Author, Publisher
 
 
 class BookSerializer(serializers.ModelSerializer):
+    pages = serializers.IntegerField(min_value=1)
+    price = serializers.IntegerField(min_value=1)
+    year = serializers.IntegerField(min_value=1900)
     class Meta:
         model = Book
         fields = '__all__'
