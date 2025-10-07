@@ -33,6 +33,19 @@ class BookDetail(APIView):
         serializer = BookSerializer(book)
         return Response(serializer.data)
 
+    def patch(self, request, pk):
+        book = self.get_object(pk)
+        serializer = BookSerializer(book, data=request.data, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def delete(self, request, pk):
+        book = self.get_object(pk)
+        book.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
 class PublisherList(APIView):
     def get(self, request):
         publishers = Publisher.objects.all()
@@ -47,10 +60,29 @@ class PublisherList(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class PublisherDetail(APIView):
+    def get_object(self, pk):
+        try:
+            return Publisher.objects.get(pk=pk)
+        except Publisher.DoesNotExist:
+            raise Http404
+
     def get(self, request, pk):
-        books = Book.objects.filter(publisher=pk)
-        serializer = BookSerializer(books, many=True)
+        publisher = self.get_object(pk)
+        serializer = PublisherSerializer(publisher)
         return Response(serializer.data)
+
+    def patch(self, request, pk):
+        publisher = self.get_object(pk)
+        serializer = PublisherSerializer(publisher, data=request.data, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def delete(self, request, pk):
+        publisher = self.get_object(pk)
+        publisher.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
 
 class AuthorList(APIView):
     def get(self, request):
@@ -66,7 +98,26 @@ class AuthorList(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class AuthorDetail(APIView):
+    def get_object(self, pk):
+        try:
+            return Author.objects.get(pk=pk)
+        except Author.DoesNotExist:
+            raise Http404
+
     def get(self, request, pk):
-        books = Book.objects.filter(author=pk)
-        serializer = BookSerializer(books, many=True)
+        author = self.get_object(pk)
+        serializer = AuthorSerializer(author, many=True)
         return Response(serializer.data)
+
+    def patch(self, request, pk):
+        author = self.get_object(pk)
+        serializer = AuthorSerializer(author, data=request.data, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def delete(self, request, pk):
+        author = self.get_object(pk)
+        author.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
