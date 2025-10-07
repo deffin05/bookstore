@@ -22,7 +22,7 @@ from store.views import BookList, AuthorList, PublisherList, BookDetail, AuthorD
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('books/', BookList.as_view()),
-    path('books/<int:pk>/', BookDetail.as_view()),
+    path('books/<int:pk>', BookDetail.as_view()),
     path('authors/', AuthorList.as_view()),
     path('authors/<int:pk>', AuthorDetail.as_view()),
     path('publishers/', PublisherList.as_view()),
