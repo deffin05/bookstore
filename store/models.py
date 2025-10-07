@@ -14,7 +14,7 @@ class Book(models.Model):
 
 
 class Author(models.Model):
-    name = models.CharField(max_length=100)
+    name = models.CharField(max_length=100, unique=True)
 
 class Publisher(models.Model):
-    name = models.CharField(max_length=100)
+    name = models.CharField(max_length=100, unique=True)
