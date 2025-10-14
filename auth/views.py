@@ -7,6 +7,8 @@ from rest_framework.views import APIView
 
 from auth.serializers import UserSerializer
 
+import logging
+logger = logging.getLogger(__name__)
 
 # Create your views here.
 
@@ -16,6 +18,7 @@ class UserList(APIView):
         serializer = UserSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
+            logger.info(f"User {serializer.data['username']} created successfully")
             return Response(serializer.data)
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
