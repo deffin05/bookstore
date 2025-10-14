@@ -33,6 +33,8 @@ authorization and user profiles.
 **POST** `/books`
 - Create a new book
 - Response status: `201`
+- Headers:
+    - Authorization: "Bearer `JWT access token`"
 - Request body:
 ```json
 {
@@ -81,6 +83,8 @@ authorization and user profiles.
 **PATCH** `/books/{id}`
 - Update info of a book
 - Response status: `200`
+- Headers:
+    - Authorization: "Bearer `JWT access token`"
 - Request body:
 ```json
 {
@@ -105,6 +109,8 @@ authorization and user profiles.
 
 **DELETE** `/books/{id}`
 - Deletes a book
+- Headers:
+    - Authorization: "Bearer `JWT access token`"
 - Response status: `204`
 ---
 **GET** `/authors`
@@ -124,6 +130,8 @@ authorization and user profiles.
 **POST** `/authors`
 - Create a new author
 - Response status: `201`
+- Headers:
+    - Authorization: "Bearer `JWT access token`"
 - Request body:
 ```json
 {
@@ -151,6 +159,8 @@ authorization and user profiles.
 **PATCH** `/autohrs/{id}`
 - Update info of an author
 - Response status: `200`
+- Headers:
+    - Authorization: "Bearer `JWT access token`"
 - Request body:
 ```json
 {
@@ -167,6 +177,8 @@ authorization and user profiles.
 
 **DELETE** `/author/{id}`
 - Deletes an author
+- Headers:
+    - Authorization: "Bearer `JWT access token`"
 - Response status: `204`
 ---
 **GET** `/publishers`
@@ -186,6 +198,8 @@ authorization and user profiles.
 **POST** `/publishers`
 - Create a new publisher
 - Response status: `201`
+- Headers:
+    - Authorization: "Bearer `JWT access token`"
 - Request body:
 ```json
 {
@@ -213,6 +227,8 @@ authorization and user profiles.
 **PATCH** `/publishers/{id}`
 - Update info of a publisher
 - Response status: `200`
+- Headers:
+    - Authorization: "Bearer `JWT access token`"
 - Request body:
 ```json
 {
@@ -229,22 +245,27 @@ authorization and user profiles.
 
 **DELETE** `/publishers/{id}`
 - Deletes a publisher
+- Headers:
+    - Authorization: "Bearer `JWT access token`"
 - Response status: `204`
 ---
-**GET** `/account/{account_id}`
-- Get account info
+**GET** `/users/{user_id}`
+- Get account info, if you are not admin and use not your id, it will instead use your
 - Response status: `200`, `401`
+- Headers:
+    - Authorization: "Bearer `JWT access token`"
 - Response body:
 ```json
 {
+    "id": 1,
     "first_name": "Dmytro",
     "last_name": "Heh",
-    "phone_number": "+3801414171",
+    "username": "deffin",
     "email": "dmytro@gmail.com"
 }
 ```
 
-**POST** `/account`
+**POST** `/users/`
 - Create a new account
 - Response status: `201`
 - Request body:
@@ -252,8 +273,9 @@ authorization and user profiles.
 {
     "first_name": "Dmytro",
     "last_name": "Heh",
-    "phone_number": "+380671417153",
-    "email": "dmytro@gmail.com"
+    "username": "deffin",
+    "email": "dmytro@gmail.com",
+    "password": "123"
 }
 ```
 - Response body:
@@ -262,18 +284,20 @@ authorization and user profiles.
     "id": 1,
     "first_name": "Dmytro",
     "last_name": "Heh",
-    "phone_number": "+380671417153",
+    "username": "deffin",
     "email": "dmytro@gmail.com"
 }
 ```
-**PATCH** `/account/{account_id}`
+**PATCH** `/users/{user_id}`
 - Update account info
 - Response status: `200`, `401`
+- Headers:
+    - Authorization: "Bearer `JWT access token`"
 - Request body:
 ```json
 {
     "first_name": "Anton",
-    "phone_number": "+380975041668"
+    "email": "aoaoaoao@cok.co"
 }
 ```
 - Response body:
@@ -285,8 +309,10 @@ authorization and user profiles.
 }
 ```
 
-**DELETE** `/account/{account_id}`
+**DELETE** `/users/{user_id}`
 - Deletes an account
+- Headers:
+    - Authorization: "Bearer `JWT access token`"
 - Response status: `204`, `401`
 ---
 **GET** `/account/{account_id}/orders`
@@ -365,6 +391,52 @@ authorization and user profiles.
 **DELETE** `/account/{account_id}/cart/{book_id}`
 - Remove a book from the cart
 - Response status: `204`, `401`
+---
 
+**POST** /api/token
+- Get JWT tokens
+- Response statuses: `200`, `401`
+- Request body:
+```json
+{
+  "username": "main",
+  "password": "123"
+}
+```
+- Response body:
+```json
+{
+    "refresh": "eyJhbGciOiJIUzI1NiIsInR...",
+    "access": "eyJhbGciOiJIUzI1NiIsInR5..."
+}
+```
+**POST** /api/token/verify
+- Verify JWT tokens
+- Response statuses: `200`, `401`
+- Request body:
+```json
+{
+  "token": "meyJhbGciOiJIUzI1NiIsInR5..."
+}
+```
+- Response body:
+```json
+{}
+```
+**POST** /api/token/refresh
+- Refresh JWT access token
+- Response statuses: `200`, `401`
+- Request body:
+```json
+{
+  "refresh": "meyJhbGciOiJIUzI1NiIsInR5..."
+}
+```
+- Response body:
+```json
+{
+  "access": "meyJhbGciOiJIUzI1NiIsInR5..."
+}
+```
 ## Database diagram
 <img width="840" height="667" alt="database_diagram" src="https://github.com/user-attachments/assets/6a263048-f9f7-41a0-b34b-3301078bb571" />
