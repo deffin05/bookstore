@@ -7,6 +7,8 @@ from rest_framework.views import APIView
 from store.models import Book, Publisher, Author
 from store.serializers import BookSerializer, PublisherSerializer, AuthorSerializer
 
+import logging
+logger = logging.getLogger(__name__)
 
 # Create your views here.
 
@@ -26,6 +28,7 @@ class BookList(APIView):
         serializer = BookSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
+            logger.info(f"User {request.user.username} created book {request.data['title']}")
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
@@ -52,6 +55,7 @@ class BookDetail(APIView):
     def delete(self, request, pk):
         book = self.get_object(pk)
         book.delete()
+        logger.info(f"User {request.user.username} deleted book {book.title}")
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 class PublisherList(APIView):
@@ -92,6 +96,7 @@ class PublisherDetail(APIView):
         try:
             publisher.delete()
         except ProtectedError:
+            logger.warning(f"User {request.user.username} tried to delete publisher {publisher.name} unsuccessfully")
             return Response("You cannot delete a publisher who has books", status=status.HTTP_403_FORBIDDEN)
         return Response(status=status.HTTP_204_NO_CONTENT)
 
@@ -133,5 +138,6 @@ class AuthorDetail(APIView):
         try:
             author.delete()
         except ProtectedError:
+            logger.warning(f"User {request.user.username} tried to delete author {author.name} unsuccessfully")
             return Response("You cannot delete an author who has active books", status=status.HTTP_403_FORBIDDEN)
         return Response(status=status.HTTP_204_NO_CONTENT)
