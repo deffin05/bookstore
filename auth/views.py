@@ -31,7 +31,7 @@ class UserDetail(APIView):
             raise Http404
 
     def get(self, request, pk):
-        if pk == 0:
+        if pk == 0 or pk != request.user.id and not request.user.is_superuser:
             pk = request.user.id
         user = self.get_object(pk)
         serializer = UserSerializer(user)
