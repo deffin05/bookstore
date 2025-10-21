@@ -440,3 +440,9 @@ authorization and user profiles.
 ```
 ## Database diagram
 <img width="840" height="667" alt="database_diagram" src="https://github.com/user-attachments/assets/6a263048-f9f7-41a0-b34b-3301078bb571" />
+
+
+## Run tests
+```bash
+pytest
+```
